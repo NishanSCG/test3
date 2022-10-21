@@ -304,6 +304,8 @@ output application/java
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="74222753-350a-4359-a3fc-f6f8d68a1163" />
+		<logger level="INFO" doc:name="Logger" doc:id="1b90c37c-3436-45d1-b4c3-2f057eb76b62" message='#["yes"]'/>
 	</flow>
 	<!-- [STUDIO:"pageFlow1"]	<flow name="pageFlow1" doc:id="72e2f179-3a49-45d7-a03b-1dd7723ae7b5" >
 		<scheduler doc:name="Scheduler" doc:id="5ba85809-75cb-445d-8c54-f7d6380ddcca" >
