@@ -304,6 +304,10 @@ output application/java
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<set-payload value='#["Hello"]' doc:name="Set Payload" doc:id="5ce24e6f-32e4-4a97-867a-5b48ed2b4b45" />
+	</flow>
+	<flow name="pageFlow2" doc:id="49d8c810-0c1a-438b-bdbb-30d9110f7f3e" >
+		<logger level="INFO" doc:name="Logger" doc:id="f344e7eb-4256-4d70-a2e4-f64e9d040d9c" />
 	</flow>
 	<!-- [STUDIO:"pageFlow1"]	<flow name="pageFlow1" doc:id="72e2f179-3a49-45d7-a03b-1dd7723ae7b5" >
 		<scheduler doc:name="Scheduler" doc:id="5ba85809-75cb-445d-8c54-f7d6380ddcca" >
