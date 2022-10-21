@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="7a4df699-d54b-4232-8223-a5d9037b6105" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="aa124a08-a03d-48bb-8f6c-4605a44496ef" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="Nishan@081997" database="training" />
+	</db:config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="cb0c91dc-2d08-474e-9fec-581f49327822" >
+		<http:request-connection host="localhost" port="8081"/>
+	</http:request-config>
+	<flow name="pageFlow" doc:id="328b96a8-fa84-4264-8bd5-adc3ca828bc0" >
+		<http:listener doc:name="Listener" doc:id="5d122c65-5947-453f-92f4-76550f4ee6ef" config-ref="HTTP_Listener_config" path="/test"/>
+		<set-variable value='#["SELECT * FROM student order by id limit " ++ (payload.limit as Number) ++ ","++ (payload .offset as Number)]' doc:name="Set Variable" doc:id="405acc12-fbda-4c0e-ad1e-0cf1f8caafb3" variableName="query"/>
+		<db:select doc:name="Select" doc:id="a0825cc6-ffc3-41a8-a7ee-fdbdc2fc7ebc" config-ref="Database_Config">
+			<db:sql ><![CDATA[#[vars.query]]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="0155f170-2a23-43a9-bb36-e6b63374b40e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="pageFlow1" doc:id="1fdeec2a-e0b3-4f21-8403-a5ea455cbaa1" >
+		<http:listener doc:name="Listener" doc:id="48b48710-cd3b-4da8-9352-35979b988eea" config-ref="HTTP_Listener_config" path="test2"/>
+		<ee:transform doc:name="Transform Message" doc:id="f0459ed2-a70d-44c5-95dd-e80b88389df2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+fun merge(name:String)={"name":name}
+	
+fun match(code:String)=code match {
+	case a if(code == "IN")->"India"
+	case b if(code =="AU")-> "Australia"
+	
+} 
+---
+merge("nishan")++
+ {"country":match("IN")}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="de3a0973-5aed-44d5-9e36-7d13a885a5d8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var a=[{
+		"name": "nishan",
+		"address": "mangalore",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "keshav",
+		"address": "mysore",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "suman",
+		"address": "hubli",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "jayaraj",
+		"address": "mangalore",
+		"Organization": ["mulesoft", "salesforce"]
+	}
+]
+
+var b=[{
+		"name": "nishan",
+		"address": "mangalore",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "keshav",
+		"address": "mysore",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "suman",
+		"address": "hubli",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "jayaraj",
+		"address": "mangalore",
+		"Organization": ["mulesoft", "salesforce"]
+	}
+]
+---
+(flatten((a map upper($.name)) +(b map upper($.name))))
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="7268e623-66ed-4d07-b29a-8a6a7f0d3cdd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var a=[{
+		"name": "nishan",
+		"address": "mangalore",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "keshav",
+		"address": "mysore",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "suman",
+		"address": "hubli",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "jayaraj",
+		"address": "mangalore",
+		"Organization": ["mulesoft", "salesforce"]
+	}
+]
+
+fun pincode(adddress:String)=if(adddress=="mangalore")1234 else 4567
+---
+(a map {
+	name : $.name,
+	address: $.address,
+	org : $.Organization map{
+		company_name:$
+	},
+	pincode:pincode($.address)
+}groupBy $.address)."mangalore"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="Strings" doc:id="2ef20bf1-74e8-4c5a-8ed3-237ed0750c5a" >
+		<ee:transform doc:name="Transform Message" doc:id="852d40b4-c764-490e-b60c-d16856ae3391" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Strings
+output application/json
+
+var a=[{
+		"name": "1233",
+		"address": "mangalore airport",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "keshav_maharaj",
+		"address": "mysore airport",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "suman",
+		"address": "hubli airport",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "jayaraj",
+		"address": "mangalore airport",
+		"Organization": ["mulesoft", "salesforce"]
+	}
+]
+
+
+---
+{
+	data:a map (item, index) -> {
+		name:item.name countCharactersBy isNumeric($),
+		isalpha:item.name countCharactersBy isAlpha($),
+		colaps:collapse(item.name),
+		countMatches: item.address countMatches "ga",
+		evrycharacter: item.name everyCharacter isNumeric($),
+		lines:lines(item.name),
+		camalize:camelize(item.name),
+		capitalize:capitalize(item.name),
+		dash:dasherize(item.address)
+	}	
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="9a36f026-3282-46d3-a219-53f56874e85b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Strings
+output application/json
+var a=[{
+		"name": "1233",
+		"address": "mangalore airport",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "keshav_maharaj",
+		"address": "mysore airport",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "suman",
+		"address": "hubli airport",
+		"Organization": ["mulesoft", "salesforce"]
+	},
+	{
+		"name": "jayaraj",
+		"address": "mangalore airport",
+		"Organization": ["mulesoft", "salesforce"]
+	}
+]
+
+fun change(name)=leftPad(name,10,"7")
+---
+{
+	data: a map (item, index) -> {
+		name:change(item[0]),
+		substring:substringAfter("aser","s"),
+		withmaxsize:item[0] withMaxSize 3
+}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="dw::Objects" doc:id="197517ee-b9ef-4fb0-a750-5714d6f582f2" >
+		<ee:transform doc:name="Transform Message" doc:id="d57adcdf-4a21-43d4-a11d-02dc163b4afe" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Objects
+output application/json
+
+var a={
+	"name":"nishan",
+	"age":25
+}
+---
+{
+	nameset: nameSet(a),
+	keyset:keySet(a),
+	someentry:a someEntry (value, key) -> value is String,
+	someentry2:a someEntry (value, key) -> value is String,
+	anykey:a someEntry (value, key) -> key as String=="name"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="dw::Arrays" doc:id="3f2333e4-50f4-40ff-992a-eeafd98002ed" >
+		<ee:transform doc:name="Transform Message" doc:id="0878da07-680b-49c8-8dd5-981149359571" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Arrays
+output application/json
+var emp=[
+	{
+		"empName":"Nishan",
+		"empDepartmrt":"IT",
+		"empSalary":20000
+	},
+	{
+		"empName":"Kumar",
+		"empDepartmrt":"Technical",
+		"empSalary":15000
+	},
+	{
+		"empName":"Keshav",
+		"empDepartmrt":"Cleaning",
+		"empSalary":10000
+	},
+	{
+		"empName":"Uday",
+		"empDepartmrt":"IT",
+		"empSalary":50000
+	}
+]
+---
+{
+	name:emp.empName[0],
+	someItDepartment:emp.empDepartmrt some ($=="IT"),
+	salarygreaterthan:emp.empSalary every ($>1000),
+	everyItDepartment:every(emp.empDepartmrt,(value)->(value=="IT")),
+	countby:emp.empSalary countBy (sal)->sal>15000,
+	sumby:emp.empSalary sumBy (sal)->(if(sal>60000)sal else 0),
+	indexWhere:emp.empName indexWhere ((item) -> item startsWith  "Ni"),
+	partition:emp.empSalary partition ((item) -> item>20000),
+	dropWhile:emp.empSalary dropWhile ((item) -> item>10000)
+
+	
+
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<!-- [STUDIO:"pageFlow1"]	<flow name="pageFlow1" doc:id="72e2f179-3a49-45d7-a03b-1dd7723ae7b5" >
+		<scheduler doc:name="Scheduler" doc:id="5ba85809-75cb-445d-8c54-f7d6380ddcca" >
+			<scheduling-strategy >
+				<fixed-frequency timeUnit="MINUTES"/>
+			</scheduling-strategy>
+		</scheduler>
+		<http:request method="GET" doc:name="Request" doc:id="4355115a-9459-4c72-bf3f-5b7430c47d00" config-ref="HTTP_Request_configuration" path="/test">
+			<http:body ><![CDATA[payload]]></http:body>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="c21c63a7-d1b3-4878-bdb7-77d67e60d490" message="#[payload]"/>
+	</flow>  [STUDIO] -->
+	</mule>
