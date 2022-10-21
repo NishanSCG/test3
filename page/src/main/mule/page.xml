@@ -295,6 +295,16 @@ var emp=[
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="8c3ac51d-2aaa-480f-8205-4f220a948896" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="5ffabb2c-1c4d-4c51-99a3-33aa384bbbff" />
 	</flow>
 	<!-- [STUDIO:"pageFlow1"]	<flow name="pageFlow1" doc:id="72e2f179-3a49-45d7-a03b-1dd7723ae7b5" >
 		<scheduler doc:name="Scheduler" doc:id="5ba85809-75cb-445d-8c54-f7d6380ddcca" >
