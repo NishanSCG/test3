@@ -145,6 +145,15 @@ fun pincode(adddress:String)=if(adddress=="mangalore")1234 else 4567
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="e4f52008-4316-4f3d-a0b7-1becea81914b" />
+		<ee:transform doc:name="Transform Message" doc:id="def40db9-ad0d-49d8-a81f-bce466cd6714" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</flow>
 	<flow name="Strings" doc:id="2ef20bf1-74e8-4c5a-8ed3-237ed0750c5a" >
 		<ee:transform doc:name="Transform Message" doc:id="852d40b4-c764-490e-b60c-d16856ae3391" >
