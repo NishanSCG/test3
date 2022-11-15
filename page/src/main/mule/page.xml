@@ -32,6 +32,8 @@ payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="2b971b63-1261-4c05-ac3d-e3cc892e4ba6" />
+		<logger level="INFO" doc:name="Logger" doc:id="45b1c738-001c-4c4d-b759-60370a90e498" />
+		<logger level="INFO" doc:name="Logger" doc:id="df9f359e-dc9e-4c3f-bbb2-cf0091bf19f6" />
 	</flow>
 	<flow name="pageFlow1" doc:id="1fdeec2a-e0b3-4f21-8403-a5ea455cbaa1" >
 		<http:listener doc:name="Listener" doc:id="48b48710-cd3b-4da8-9352-35979b988eea" config-ref="HTTP_Listener_config" path="test2"/>
@@ -143,6 +145,15 @@ fun pincode(adddress:String)=if(adddress=="mangalore")1234 else 4567
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="e4f52008-4316-4f3d-a0b7-1becea81914b" />
+		<ee:transform doc:name="Transform Message" doc:id="def40db9-ad0d-49d8-a81f-bce466cd6714" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</flow>
 	<flow name="Strings" doc:id="2ef20bf1-74e8-4c5a-8ed3-237ed0750c5a" >
 		<ee:transform doc:name="Transform Message" doc:id="852d40b4-c764-490e-b60c-d16856ae3391" >
