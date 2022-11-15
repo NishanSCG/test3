@@ -32,6 +32,8 @@ payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="2b971b63-1261-4c05-ac3d-e3cc892e4ba6" />
+		<logger level="INFO" doc:name="Logger" doc:id="7731d239-41b5-43f5-be68-801a2952f3e0" />
+		<logger level="INFO" doc:name="Logger" doc:id="e21e3651-2d1f-42ef-8725-50cf9a156f4a" />
 	</flow>
 	<flow name="pageFlow1" doc:id="1fdeec2a-e0b3-4f21-8403-a5ea455cbaa1" >
 		<http:listener doc:name="Listener" doc:id="48b48710-cd3b-4da8-9352-35979b988eea" config-ref="HTTP_Listener_config" path="test2"/>
